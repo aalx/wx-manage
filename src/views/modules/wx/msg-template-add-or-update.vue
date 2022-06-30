@@ -119,6 +119,7 @@ export default {
             
             template.data=[]
             let keysArray = template.content.match(/\{\{(\w*)\.DATA\}\}/g) || [] //示例： ["{{first.DATA}}", "{{keyword1.DATA}}", "{{keyword2.DATA}}", "{{remark.DATA}}"]
+            console.log(keysArray)
             keysArray.map(item=>{
                 name=item.replace('{{','').replace('.DATA}}','')
                 template.data.push({"name":name,"value":"",color:"#000000"})

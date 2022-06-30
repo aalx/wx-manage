@@ -11,7 +11,7 @@
                 <el-col :span="12">
                     <el-form-item label="作用范围" prop="appid">
                         <el-select v-model="dataForm.appid" placeholder="作用范围">
-                            <el-option label="全部公众号" value=""></el-option>
+                            <el-option v-if="isAuth('wx:msgreplyrule:saveall')"  label="全部公众号" value=""></el-option>
                             <el-option label="当前公众号" :value="selectedAppid"></el-option>
                         </el-select>
                     </el-form-item>

@@ -21,6 +21,11 @@
                     <el-checkbox v-for="role in roleList" :key="role.roleId" :label="role.roleId">{{ role.roleName }}</el-checkbox>
                 </el-checkbox-group>
             </el-form-item>
+            <el-form-item label-width="100px" label="公众号范围"  prop="wxRoleIdList">
+                <el-checkbox-group v-model="dataForm.appRoleIdList">
+                    <el-checkbox v-for="wxRole in wxRoleList" :key="wxRole.roleId" :label="wxRole.roleId">{{ wxRole.roleName }}</el-checkbox>
+                </el-checkbox-group>
+            </el-form-item>
             <el-form-item label="状态" size="mini" prop="status">
                 <el-radio-group v-model="dataForm.status">
                     <el-radio :label="0">禁用</el-radio>
@@ -72,6 +77,7 @@ export default {
         return {
             visible: false,
             roleList: [],
+            wxRoleList:[],
             dataForm: {
                 id: 0,
                 userName: '',
@@ -81,6 +87,7 @@ export default {
                 email: '',
                 mobile: '',
                 roleIdList: [],
+                appRoleIdList: [],
                 status: 1
             },
             dataRule: {
@@ -113,7 +120,17 @@ export default {
                 params: this.$http.adornParams()
             }).then(({ data }) => {
                 this.roleList = data && data.code === 200 ? data.list : []
-            }).then(() => {
+            }).then(
+                ()=>{
+                    this.$http({
+                        url: this.$http.adornUrl('/wx/role/select'),
+                        method: 'get',
+                        params: this.$http.adornParams()
+                    }).then(({ data }) => {
+                        this.wxRoleList = data && data.code === 200 ? data.list : []
+                    })
+                }
+            ).then(() => {
                 this.visible = true
                 this.$nextTick(() => {
                     this.$refs['dataForm'].resetFields()
@@ -130,7 +147,8 @@ export default {
                             this.dataForm.salt = data.user.salt
                             this.dataForm.email = data.user.email
                             this.dataForm.mobile = data.user.mobile
-                            this.dataForm.roleIdList = data.user.roleIdList
+                            this.dataForm.roleIdList = data.user.roleIdList                            
+                            this.dataForm.appRoleIdList = data.user.appRoleIdList
                             this.dataForm.status = data.user.status
                         }
                     })
@@ -152,7 +170,8 @@ export default {
                             'email': this.dataForm.email,
                             'mobile': this.dataForm.mobile,
                             'status': this.dataForm.status,
-                            'roleIdList': this.dataForm.roleIdList
+                            'roleIdList': this.dataForm.roleIdList,
+                            'appRoleIdList': this.dataForm.appRoleIdList
                         })
                     }).then(({ data }) => {
                         if (data && data.code === 200) {

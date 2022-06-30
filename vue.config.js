@@ -4,15 +4,14 @@ module.exports = {
 		// 后端请求转发，此配置仅开发环境有效，生产环境请参考生产环境部署文档配置nginx转发
 		proxy: {
 			'/wx': {
-				target: 'http://localhost:8088/'
+				target: 'http://192.168.1.177:8088/'
 			}
 		},
-		port:8001,
-		inline:false //实时编译
+		port:8001
 	},
 	configureWebpack:{
 		devServer: {
-			disableHostCheck: true
+			allowedHosts: "all",
 		}
 	},
 	chainWebpack: config => {
